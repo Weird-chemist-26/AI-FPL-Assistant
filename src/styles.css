@@ -374,3 +374,87 @@
     background: oklch(1 0 0 / 0.03);
   }
 }
+
+@layer components {
+  .pitch {
+    position: relative;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        oklch(0.33 0.08 150 / 0.55) 0 8%,
+        oklch(0.29 0.07 150 / 0.55) 8% 16%
+      );
+    padding: 1.25rem 0.75rem;
+    display: grid;
+    gap: 1rem;
+    overflow: hidden;
+  }
+  .pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0.5rem;
+    border: 1px solid oklch(1 0 0 / 0.18);
+    border-radius: calc(var(--radius-lg) - 2px);
+    pointer-events: none;
+  }
+  .pitch::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 6rem;
+    height: 6rem;
+    transform: translate(-50%, -50%);
+    border: 1px solid oklch(1 0 0 / 0.18);
+    border-radius: 999px;
+    pointer-events: none;
+  }
+  .pitch-row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .shirt {
+    width: 5.1rem;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    background: oklch(0.16 0.02 150 / 0.72);
+    border: 1px solid oklch(1 0 0 / 0.14);
+    padding: 0.4rem 0.25rem;
+  }
+  .shirt-name {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .shirt-meta {
+    display: block;
+    font-size: 0.62rem;
+    color: var(--color-muted-foreground);
+  }
+  .shirt-price {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  .budget-bar {
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-secondary);
+    overflow: hidden;
+  }
+  .budget-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--color-primary);
+  }
+}

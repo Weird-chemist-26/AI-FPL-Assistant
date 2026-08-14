@@ -210,6 +210,74 @@ function Index() {
           </div>
         </section>
 
+        {/* Lineup on the pitch */}
+        {squad && (
+          <section className="mb-10">
+            <div className="section-head">
+              <h2 className="display text-2xl">Lineup</h2>
+              <span className="text-xs text-muted-foreground">
+                {squad.formation} · captain {squad.captain?.name ?? "—"}
+              </span>
+            </div>
+            <div className="panel">
+              <div className="pitch">
+                {(["GKP", "DEF", "MID", "FWD"] as Pos[]).map((row) => (
+                  <div key={row} className="pitch-row">
+                    {squad.xi
+                      .filter((p) => p.pos === row)
+                      .map((p) => (
+                        <div key={p.id} className="shirt">
+                          <span className="pos-badge">{p.pos}</span>
+                          <span className="shirt-name">
+                            {p.name}
+                            {squad.captain?.id === p.id && <span className="armband">C</span>}
+                            {squad.vice?.id === p.id && <span className="armband armband-v">V</span>}
+                          </span>
+                          <span className="shirt-meta">{p.team}</span>
+                          <span className="shirt-price">£{p.price.toFixed(1)}m</span>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="ctl-label">Bench</p>
+                <div className="flex flex-wrap gap-2">
+                  {squad.bench.map((p) => (
+                    <span key={p.id} className="bench-chip">
+                      <b>{p.pos}</b> {p.name} · £{p.price.toFixed(1)}m
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 border-t border-border pt-4">
+                <div className="flex flex-wrap items-end justify-between gap-2 text-sm">
+                  <span className="ctl-label">Total budget</span>
+                  <span>
+                    <b className="score">£{squad.cost.toFixed(1)}m</b>
+                    <span className="text-muted-foreground"> of £{budget.toFixed(1)}m used</span>
+                  </span>
+                </div>
+                <div className="budget-bar mt-2">
+                  <span style={{ width: `${Math.min(100, (squad.cost / budget) * 100)}%` }} />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-4 text-xs text-muted-foreground">
+                  <span>
+                    XI cost £{squad.xi.reduce((s, p) => s + p.price, 0).toFixed(1)}m
+                  </span>
+                  <span>
+                    Bench cost £{squad.bench.reduce((s, p) => s + p.price, 0).toFixed(1)}m
+                  </span>
+                  <span>Remaining £{(budget - squad.cost).toFixed(1)}m</span>
+                  <span>{squad.squad.length} players</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Suggested squad */}
         {squad && (
           <section className="mb-10">
@@ -238,16 +306,6 @@ function Index() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 border-t border-border pt-3">
-                <p className="ctl-label">Bench</p>
-                <div className="flex flex-wrap gap-2">
-                  {squad.bench.map((p) => (
-                    <span key={p.id} className="bench-chip">
-                      <b>{p.pos}</b> {p.name} · £{p.price.toFixed(1)}m
-                    </span>
-                  ))}
-                </div>
-              </div>
               {squad.captain && (
                 <p className="mt-4 text-sm">
                   <span className="text-accent font-semibold">Captain:</span> {squad.captain.name} (
@@ -257,6 +315,7 @@ function Index() {
             </div>
           </section>
         )}
+
 
         {/* Rankings */}
         <section>
