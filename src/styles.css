@@ -63,39 +63,47 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: oklch(0.17 0.03 168);
+  --foreground: oklch(0.96 0.01 150);
+  --card: oklch(0.22 0.035 168);
+  --card-foreground: oklch(0.96 0.01 150);
+  --popover: oklch(0.22 0.035 168);
+  --popover-foreground: oklch(0.96 0.01 150);
+  --primary: oklch(0.86 0.22 140);
+  --primary-foreground: oklch(0.19 0.05 150);
+  --secondary: oklch(0.27 0.04 168);
+  --secondary-foreground: oklch(0.96 0.01 150);
+  --muted: oklch(0.26 0.03 168);
+  --muted-foreground: oklch(0.72 0.03 160);
+  --accent: oklch(0.83 0.19 85);
+  --accent-foreground: oklch(0.2 0.05 90);
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.98 0.01 150);
+  --border: oklch(0.32 0.035 168);
+  --input: oklch(0.3 0.035 168);
+  --ring: oklch(0.86 0.22 140);
+  --chart-1: oklch(0.86 0.22 140);
+  --chart-2: oklch(0.83 0.19 85);
+  --chart-3: oklch(0.7 0.15 200);
+  --chart-4: oklch(0.62 0.21 25);
+  --chart-5: oklch(0.75 0.1 160);
+  --sidebar: oklch(0.2 0.035 168);
+  --sidebar-foreground: oklch(0.96 0.01 150);
+  --sidebar-primary: oklch(0.86 0.22 140);
+  --sidebar-primary-foreground: oklch(0.19 0.05 150);
+  --sidebar-accent: oklch(0.27 0.04 168);
+  --sidebar-accent-foreground: oklch(0.96 0.01 150);
+  --sidebar-border: oklch(0.32 0.035 168);
+  --sidebar-ring: oklch(0.86 0.22 140);
+
+  --font-display: "Bebas Neue", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, sans-serif;
+  --fdr-good: oklch(0.8 0.19 150);
+  --fdr-ok: oklch(0.75 0.04 160);
+  --fdr-hard: oklch(0.72 0.17 55);
+  --fdr-brutal: oklch(0.62 0.21 25);
 }
+
 
 .dark {
   --background: oklch(0.129 0.042 264.695);
@@ -140,5 +148,229 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+  }
+}
+
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .pitch-glow {
+    background:
+      radial-gradient(120% 90% at 12% -10%, oklch(0.35 0.12 155 / 0.55), transparent 60%),
+      repeating-linear-gradient(
+        90deg,
+        oklch(1 0 0 / 0.02) 0 60px,
+        transparent 60px 120px
+      );
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .panel {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-card);
+    padding: 1.25rem;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stat-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem 0.9rem;
+    background: var(--color-card);
+    font-size: 0.75rem;
+    color: var(--color-muted-foreground);
+  }
+  .stat-chip strong {
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+  }
+
+  .ctl-label {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+    margin-bottom: 0.45rem;
+  }
+
+  .pill {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-muted-foreground);
+    transition: all 0.15s ease;
+  }
+  .pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-foreground);
+  }
+  .pill-active {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    border-color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .field {
+    width: 100%;
+    border: 1px solid var(--color-input);
+    background: var(--color-secondary);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    color: var(--color-foreground);
+    outline: none;
+  }
+  .field:focus {
+    border-color: var(--color-primary);
+  }
+
+  .range {
+    width: 100%;
+    accent-color: var(--color-primary);
+  }
+
+  .fdr {
+    display: inline-flex;
+    min-width: 2.4rem;
+    justify-content: center;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: oklch(0.18 0.03 160);
+  }
+  .fdr-2 { background: var(--fdr-good); }
+  .fdr-3 { background: var(--fdr-ok); }
+  .fdr-4 { background: var(--fdr-hard); }
+  .fdr-5 { background: var(--fdr-brutal); color: oklch(0.98 0 0); }
+
+  .tag-setpiece {
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .pos-badge {
+    display: inline-block;
+    background: var(--color-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-muted-foreground);
+  }
+
+  .score {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-primary);
+  }
+
+  .squad-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-secondary);
+    padding: 0.6rem 0.8rem;
+  }
+
+  .armband {
+    margin-left: 0.4rem;
+    display: inline-flex;
+    height: 1.15rem;
+    width: 1.15rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    font-size: 0.62rem;
+    font-weight: 800;
+  }
+  .armband-v {
+    background: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+
+  .bench-chip {
+    border: 1px dashed var(--color-border);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.72rem;
+    color: var(--color-muted-foreground);
+  }
+
+  .news {
+    font-size: 0.68rem;
+    color: var(--fdr-hard);
+    margin-top: 0.15rem;
+    max-width: 16rem;
+  }
+
+  table thead th {
+    text-align: left;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+  }
+  table tbody td {
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid oklch(1 0 0 / 0.05);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  table tbody tr:hover {
+    background: oklch(1 0 0 / 0.03);
   }
 }
