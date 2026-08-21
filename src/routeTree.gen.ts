@@ -9,50 +9,86 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as PickerRouteImport } from './routes/picker'
+import { Route as ApiFplBootstrapRouteImport } from './routes/api/fpl/bootstrap'
+import { Route as ApiFplPlayersRouteImport } from './routes/api/fpl/players'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const PickerRoute = PickerRouteImport.update({
+  id: '/picker',
+  path: '/picker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFplBootstrapRoute = ApiFplBootstrapRouteImport.update({
+  id: '/api/fpl/bootstrap',
+  path: '/api/fpl/bootstrap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFplPlayersRoute = ApiFplPlayersRouteImport.update({
+  id: '/api/fpl/players',
+  path: '/api/fpl/players',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/picker': typeof PickerRoute
+  '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/picker': typeof PickerRoute
+  '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/picker': typeof PickerRoute
+  '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
+  id: '__root__' | '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PickerRoute: typeof PickerRoute
+  ApiFplBootstrapRoute: typeof ApiFplBootstrapRoute
+  ApiFplPlayersRoute: typeof ApiFplPlayersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/picker': {
+      id: '/picker'
+      path: '/picker'
+      fullPath: '/picker'
+      preLoaderRoute: typeof PickerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/fpl/bootstrap': {
+      id: '/api/fpl/bootstrap'
+      path: '/api/fpl/bootstrap'
+      fullPath: '/api/fpl/bootstrap'
+      preLoaderRoute: typeof ApiFplBootstrapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/fpl/players': {
+      id: '/api/fpl/players'
+      path: '/api/fpl/players'
+      fullPath: '/api/fpl/players'
+      preLoaderRoute: typeof ApiFplPlayersRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  PickerRoute: PickerRoute,
+  ApiFplBootstrapRoute: ApiFplBootstrapRoute,
+  ApiFplPlayersRoute: ApiFplPlayersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

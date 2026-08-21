@@ -13,7 +13,7 @@ import {
 } from "@/lib/squad";
 import { Shirt } from "@/components/Shirt";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/picker")({
   head: () => ({
     meta: [
       { title: "Gaffer — FPL Gameweek Picker & Squad Builder" },
