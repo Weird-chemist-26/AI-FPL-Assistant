@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PickerRouteImport } from './routes/picker'
 import { Route as ApiFplBootstrapRouteImport } from './routes/api/fpl/bootstrap'
+import { Route as ApiFplPlayersRouteImport } from './routes/api/fpl/players'
 
 const PickerRoute = PickerRouteImport.update({
   id: '/picker',
@@ -22,31 +23,40 @@ const ApiFplBootstrapRoute = ApiFplBootstrapRouteImport.update({
   path: '/api/fpl/bootstrap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFplPlayersRoute = ApiFplPlayersRouteImport.update({
+  id: '/api/fpl/players',
+  path: '/api/fpl/players',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRoutesByTo {
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
+  '/api/fpl/players': typeof ApiFplPlayersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/picker' | '/api/fpl/bootstrap'
+  fullPaths: '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
   fileRoutesByTo: FileRoutesByTo
-  to: '/picker' | '/api/fpl/bootstrap'
-  id: '__root__' | '/picker' | '/api/fpl/bootstrap'
+  to: '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
+  id: '__root__' | '/picker' | '/api/fpl/bootstrap' | '/api/fpl/players'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   PickerRoute: typeof PickerRoute
   ApiFplBootstrapRoute: typeof ApiFplBootstrapRoute
+  ApiFplPlayersRoute: typeof ApiFplPlayersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFplBootstrapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/fpl/players': {
+      id: '/api/fpl/players'
+      path: '/api/fpl/players'
+      fullPath: '/api/fpl/players'
+      preLoaderRoute: typeof ApiFplPlayersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   PickerRoute: PickerRoute,
   ApiFplBootstrapRoute: ApiFplBootstrapRoute,
+  ApiFplPlayersRoute: ApiFplPlayersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
