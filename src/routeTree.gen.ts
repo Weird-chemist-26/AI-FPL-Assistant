@@ -14,6 +14,7 @@ import { Route as ApiFplBootstrapRouteImport } from './routes/api/fpl/bootstrap'
 import { Route as ApiFplFixturesRouteImport } from './routes/api/fpl/fixtures'
 import { Route as ApiFplPlayersRouteImport } from './routes/api/fpl/players'
 import { Route as ApiFplTeamTeamIdRouteImport } from './routes/api/fpl/team.$teamId'
+import { Route as ApiFplTeamTeamIdPicksGameweekRouteImport } from './routes/api/fpl/team.$teamId.picks.$gameweek'
 
 const PickerRoute = PickerRouteImport.update({
   id: '/picker',
@@ -40,20 +41,28 @@ const ApiFplTeamTeamIdRoute = ApiFplTeamTeamIdRouteImport.update({
   path: '/api/fpl/team/$teamId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFplTeamTeamIdPicksGameweekRoute =
+  ApiFplTeamTeamIdPicksGameweekRouteImport.update({
+    id: '/picks/$gameweek',
+    path: '/picks/$gameweek',
+    getParentRoute: () => ApiFplTeamTeamIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
-  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRoute
+  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRoutesByTo {
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
-  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRoute
+  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,7 +70,8 @@ export interface FileRoutesById {
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
-  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRoute
+  '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,6 +81,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/picker'
@@ -78,6 +89,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/picks/$gameweek'
   id:
     | '__root__'
     | '/picker'
@@ -85,6 +97,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +105,7 @@ export interface RootRouteChildren {
   ApiFplBootstrapRoute: typeof ApiFplBootstrapRoute
   ApiFplFixturesRoute: typeof ApiFplFixturesRoute
   ApiFplPlayersRoute: typeof ApiFplPlayersRoute
-  ApiFplTeamTeamIdRoute: typeof ApiFplTeamTeamIdRoute
+  ApiFplTeamTeamIdRoute: typeof ApiFplTeamTeamIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -132,15 +145,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFplTeamTeamIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/fpl/team/$teamId/picks/$gameweek': {
+      id: '/api/fpl/team/$teamId/picks/$gameweek'
+      path: '/picks/$gameweek'
+      fullPath: '/api/fpl/team/$teamId/picks/$gameweek'
+      preLoaderRoute: typeof ApiFplTeamTeamIdPicksGameweekRouteImport
+      parentRoute: typeof ApiFplTeamTeamIdRoute
+    }
   }
 }
+
+interface ApiFplTeamTeamIdRouteChildren {
+  ApiFplTeamTeamIdPicksGameweekRoute: typeof ApiFplTeamTeamIdPicksGameweekRoute
+}
+
+const ApiFplTeamTeamIdRouteChildren: ApiFplTeamTeamIdRouteChildren = {
+  ApiFplTeamTeamIdPicksGameweekRoute: ApiFplTeamTeamIdPicksGameweekRoute,
+}
+
+const ApiFplTeamTeamIdRouteWithChildren =
+  ApiFplTeamTeamIdRoute._addFileChildren(ApiFplTeamTeamIdRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   PickerRoute: PickerRoute,
   ApiFplBootstrapRoute: ApiFplBootstrapRoute,
   ApiFplFixturesRoute: ApiFplFixturesRoute,
   ApiFplPlayersRoute: ApiFplPlayersRoute,
-  ApiFplTeamTeamIdRoute: ApiFplTeamTeamIdRoute,
+  ApiFplTeamTeamIdRoute: ApiFplTeamTeamIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
