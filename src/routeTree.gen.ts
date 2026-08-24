@@ -16,6 +16,7 @@ import { Route as ApiFplPlayersRouteImport } from './routes/api/fpl/players'
 import { Route as ApiFplTeamTeamIdRouteImport } from './routes/api/fpl/team.$teamId'
 import { Route as ApiFplTeamTeamIdHistoryRouteImport } from './routes/api/fpl/team.$teamId.history'
 import { Route as ApiFplTeamTeamIdLeaguesRouteImport } from './routes/api/fpl/team.$teamId.leagues'
+import { Route as ApiFplTeamTeamIdRecommendationsRouteImport } from './routes/api/fpl/team.$teamId.recommendations'
 import { Route as ApiFplTeamTeamIdTransfersRouteImport } from './routes/api/fpl/team.$teamId.transfers'
 import { Route as ApiFplTeamTeamIdPicksGameweekRouteImport } from './routes/api/fpl/team.$teamId.picks.$gameweek'
 
@@ -54,6 +55,12 @@ const ApiFplTeamTeamIdLeaguesRoute = ApiFplTeamTeamIdLeaguesRouteImport.update({
   path: '/leagues',
   getParentRoute: () => ApiFplTeamTeamIdRoute,
 } as any)
+const ApiFplTeamTeamIdRecommendationsRoute =
+  ApiFplTeamTeamIdRecommendationsRouteImport.update({
+    id: '/recommendations',
+    path: '/recommendations',
+    getParentRoute: () => ApiFplTeamTeamIdRoute,
+  } as any)
 const ApiFplTeamTeamIdTransfersRoute =
   ApiFplTeamTeamIdTransfersRouteImport.update({
     id: '/transfers',
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
   '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/leagues': typeof ApiFplTeamTeamIdLeaguesRoute
+  '/api/fpl/team/$teamId/recommendations': typeof ApiFplTeamTeamIdRecommendationsRoute
   '/api/fpl/team/$teamId/transfers': typeof ApiFplTeamTeamIdTransfersRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
@@ -86,6 +94,7 @@ export interface FileRoutesByTo {
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
   '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/leagues': typeof ApiFplTeamTeamIdLeaguesRoute
+  '/api/fpl/team/$teamId/recommendations': typeof ApiFplTeamTeamIdRecommendationsRoute
   '/api/fpl/team/$teamId/transfers': typeof ApiFplTeamTeamIdTransfersRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
@@ -98,6 +107,7 @@ export interface FileRoutesById {
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
   '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/leagues': typeof ApiFplTeamTeamIdLeaguesRoute
+  '/api/fpl/team/$teamId/recommendations': typeof ApiFplTeamTeamIdRecommendationsRoute
   '/api/fpl/team/$teamId/transfers': typeof ApiFplTeamTeamIdTransfersRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/api/fpl/team/$teamId'
     | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/leagues'
+    | '/api/fpl/team/$teamId/recommendations'
     | '/api/fpl/team/$teamId/transfers'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesByTo: FileRoutesByTo
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/api/fpl/team/$teamId'
     | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/leagues'
+    | '/api/fpl/team/$teamId/recommendations'
     | '/api/fpl/team/$teamId/transfers'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   id:
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
     | '/api/fpl/team/$teamId'
     | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/leagues'
+    | '/api/fpl/team/$teamId/recommendations'
     | '/api/fpl/team/$teamId/transfers'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesById: FileRoutesById
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFplTeamTeamIdLeaguesRouteImport
       parentRoute: typeof ApiFplTeamTeamIdRoute
     }
+    '/api/fpl/team/$teamId/recommendations': {
+      id: '/api/fpl/team/$teamId/recommendations'
+      path: '/recommendations'
+      fullPath: '/api/fpl/team/$teamId/recommendations'
+      preLoaderRoute: typeof ApiFplTeamTeamIdRecommendationsRouteImport
+      parentRoute: typeof ApiFplTeamTeamIdRoute
+    }
     '/api/fpl/team/$teamId/transfers': {
       id: '/api/fpl/team/$teamId/transfers'
       path: '/transfers'
@@ -216,6 +236,7 @@ declare module '@tanstack/react-router' {
 interface ApiFplTeamTeamIdRouteChildren {
   ApiFplTeamTeamIdHistoryRoute: typeof ApiFplTeamTeamIdHistoryRoute
   ApiFplTeamTeamIdLeaguesRoute: typeof ApiFplTeamTeamIdLeaguesRoute
+  ApiFplTeamTeamIdRecommendationsRoute: typeof ApiFplTeamTeamIdRecommendationsRoute
   ApiFplTeamTeamIdTransfersRoute: typeof ApiFplTeamTeamIdTransfersRoute
   ApiFplTeamTeamIdPicksGameweekRoute: typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
@@ -223,6 +244,7 @@ interface ApiFplTeamTeamIdRouteChildren {
 const ApiFplTeamTeamIdRouteChildren: ApiFplTeamTeamIdRouteChildren = {
   ApiFplTeamTeamIdHistoryRoute: ApiFplTeamTeamIdHistoryRoute,
   ApiFplTeamTeamIdLeaguesRoute: ApiFplTeamTeamIdLeaguesRoute,
+  ApiFplTeamTeamIdRecommendationsRoute: ApiFplTeamTeamIdRecommendationsRoute,
   ApiFplTeamTeamIdTransfersRoute: ApiFplTeamTeamIdTransfersRoute,
   ApiFplTeamTeamIdPicksGameweekRoute: ApiFplTeamTeamIdPicksGameweekRoute,
 }
