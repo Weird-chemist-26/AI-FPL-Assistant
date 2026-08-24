@@ -14,6 +14,7 @@ import { Route as ApiFplBootstrapRouteImport } from './routes/api/fpl/bootstrap'
 import { Route as ApiFplFixturesRouteImport } from './routes/api/fpl/fixtures'
 import { Route as ApiFplPlayersRouteImport } from './routes/api/fpl/players'
 import { Route as ApiFplTeamTeamIdRouteImport } from './routes/api/fpl/team.$teamId'
+import { Route as ApiFplTeamTeamIdHistoryRouteImport } from './routes/api/fpl/team.$teamId.history'
 import { Route as ApiFplTeamTeamIdPicksGameweekRouteImport } from './routes/api/fpl/team.$teamId.picks.$gameweek'
 
 const PickerRoute = PickerRouteImport.update({
@@ -41,6 +42,11 @@ const ApiFplTeamTeamIdRoute = ApiFplTeamTeamIdRouteImport.update({
   path: '/api/fpl/team/$teamId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFplTeamTeamIdHistoryRoute = ApiFplTeamTeamIdHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => ApiFplTeamTeamIdRoute,
+} as any)
 const ApiFplTeamTeamIdPicksGameweekRoute =
   ApiFplTeamTeamIdPicksGameweekRouteImport.update({
     id: '/picks/$gameweek',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRoutesByTo {
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRoutesById {
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
   '/api/fpl/players': typeof ApiFplPlayersRoute
   '/api/fpl/team/$teamId': typeof ApiFplTeamTeamIdRouteWithChildren
+  '/api/fpl/team/$teamId/history': typeof ApiFplTeamTeamIdHistoryRoute
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRouteTypes {
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   id:
     | '__root__'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/api/fpl/fixtures'
     | '/api/fpl/players'
     | '/api/fpl/team/$teamId'
+    | '/api/fpl/team/$teamId/history'
     | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesById: FileRoutesById
 }
@@ -145,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFplTeamTeamIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/fpl/team/$teamId/history': {
+      id: '/api/fpl/team/$teamId/history'
+      path: '/history'
+      fullPath: '/api/fpl/team/$teamId/history'
+      preLoaderRoute: typeof ApiFplTeamTeamIdHistoryRouteImport
+      parentRoute: typeof ApiFplTeamTeamIdRoute
+    }
     '/api/fpl/team/$teamId/picks/$gameweek': {
       id: '/api/fpl/team/$teamId/picks/$gameweek'
       path: '/picks/$gameweek'
@@ -156,10 +175,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ApiFplTeamTeamIdRouteChildren {
+  ApiFplTeamTeamIdHistoryRoute: typeof ApiFplTeamTeamIdHistoryRoute
   ApiFplTeamTeamIdPicksGameweekRoute: typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 
 const ApiFplTeamTeamIdRouteChildren: ApiFplTeamTeamIdRouteChildren = {
+  ApiFplTeamTeamIdHistoryRoute: ApiFplTeamTeamIdHistoryRoute,
   ApiFplTeamTeamIdPicksGameweekRoute: ApiFplTeamTeamIdPicksGameweekRoute,
 }
 
