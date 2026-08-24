@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as PickerRouteImport } from './routes/picker'
 import { Route as ApiFplBootstrapRouteImport } from './routes/api/fpl/bootstrap'
 import { Route as ApiFplFixturesRouteImport } from './routes/api/fpl/fixtures'
@@ -20,6 +21,11 @@ import { Route as ApiFplTeamTeamIdRecommendationsRouteImport } from './routes/ap
 import { Route as ApiFplTeamTeamIdTransfersRouteImport } from './routes/api/fpl/team.$teamId.transfers'
 import { Route as ApiFplTeamTeamIdPicksGameweekRouteImport } from './routes/api/fpl/team.$teamId.picks.$gameweek'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PickerRoute = PickerRouteImport.update({
   id: '/picker',
   path: '/picker',
@@ -75,6 +81,7 @@ const ApiFplTeamTeamIdPicksGameweekRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/api/fpl/team/$teamId/picks/$gameweek': typeof ApiFplTeamTeamIdPicksGameweekRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
@@ -100,6 +108,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/picker': typeof PickerRoute
   '/api/fpl/bootstrap': typeof ApiFplBootstrapRoute
   '/api/fpl/fixtures': typeof ApiFplFixturesRoute
@@ -114,6 +123,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/picker'
     | '/api/fpl/bootstrap'
     | '/api/fpl/fixtures'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/api/fpl/team/$teamId/picks/$gameweek'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/picker'
     | '/api/fpl/bootstrap'
     | '/api/fpl/fixtures'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/api/fpl/team/$teamId/picks/$gameweek'
   id:
     | '__root__'
+    | '/'
     | '/picker'
     | '/api/fpl/bootstrap'
     | '/api/fpl/fixtures'
@@ -151,6 +163,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   PickerRoute: typeof PickerRoute
   ApiFplBootstrapRoute: typeof ApiFplBootstrapRoute
   ApiFplFixturesRoute: typeof ApiFplFixturesRoute
@@ -160,6 +173,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/picker': {
       id: '/picker'
       path: '/picker'
@@ -253,6 +273,7 @@ const ApiFplTeamTeamIdRouteWithChildren =
   ApiFplTeamTeamIdRoute._addFileChildren(ApiFplTeamTeamIdRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   PickerRoute: PickerRoute,
   ApiFplBootstrapRoute: ApiFplBootstrapRoute,
   ApiFplFixturesRoute: ApiFplFixturesRoute,
