@@ -1,4 +1,4 @@
-# Remix of Fantasy Ace
+# AI Fantasy Tool
 
 build me a personal  AI premier league fantasy tool to use to help select players per gameweek and taking in the official FPL rules and instructions. The player selection should be based on the information like in form players, set piece takers, easy fixtures
 
