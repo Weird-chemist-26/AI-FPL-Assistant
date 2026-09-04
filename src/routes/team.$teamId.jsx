@@ -316,6 +316,130 @@ function TeamDashboard() {
             </div>
             {recs.isLoading && <LoadingBlock label="Crunching form, fixtures and xG…" />}
             {recs.isError && <ErrorBlock error={recs.error} />}
+
+            {recs.data?.captain?.pick && (
+              <div className="panel mb-4">
+                <div className="section-head">
+                  <h3 className="display text-xl">Captain for GW {recs.data.gameweek}</h3>
+                  <span className="text-xs text-muted-foreground">
+                    {recs.data.captain.alreadyCaptain
+                      ? "You already have the armband right"
+                      : "Suggested armband change"}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm">
+                    <span className="armband">C</span>{" "}
+                    <button className="underline" onClick={() => setSelected(recs.data.captain.pick)}>
+                      <b>{recs.data.captain.pick.name}</b>
+                    </button>{" "}
+                    <span className="pos-badge">{recs.data.captain.pick.position}</span>{" "}
+                    <span className="text-xs text-muted-foreground">
+                      {recs.data.captain.pick.club}
+                      {recs.data.captain.pick.gameweekFixtures?.length
+                        ? ` · ${recs.data.captain.pick.gameweekFixtures
+                            .map((f) => `${f.opponent} (${f.home ? "H" : "A"})`)
+                            .join(", ")}`
+                        : ""}
+                    </span>
+                  </p>
+                  <span className="score">{recs.data.captain.pick.captainScore}</span>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {recs.data.captain.pick.reasons.map((r) => (
+                    <span key={r} className="tag-setpiece">
+                      {r}
+                    </span>
+                  ))}
+                </div>
+                {recs.data.captain.vice && (
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Vice-captain:{" "}
+                    <button
+                      className="underline"
+                      onClick={() => setSelected(recs.data.captain.vice)}
+                    >
+                      {recs.data.captain.vice.name}
+                    </button>{" "}
+                    ({recs.data.captain.vice.club})
+                  </p>
+                )}
+                {recs.data.captain.options.length > 2 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {recs.data.captain.options.slice(2).map((o) => (
+                      <span key={o.id} className="bench-chip">
+                        {o.name} · {o.captainScore}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {recs.data?.chips?.advice?.length > 0 && (
+              <div className="panel mb-4">
+                <div className="section-head">
+                  <h3 className="display text-xl">Chip strategy</h3>
+                  <span className="text-xs text-muted-foreground">
+                    {recs.data.chips.used.length
+                      ? `Used: ${recs.data.chips.used.map((c) => `${c.name} (GW${c.gameweek})`).join(", ")}`
+                      : "No chips used yet"}
+                  </span>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {recs.data.chips.advice.map((c) => (
+                    <div key={c.chip} className="squad-card">
+                      <span>
+                        <b className="text-sm">{c.label}</b>
+                        <span className="block text-xs text-muted-foreground">{c.reason}</span>
+                      </span>
+                      <span className={c.recommended ? "pill pill-active" : "bench-chip"}>
+                        {c.recommended ? "Play it" : "Hold"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {recs.data?.transferPlan && (
+              <div className="panel mb-4">
+                <div className="section-head">
+                  <h3 className="display text-xl">
+                    Your {recs.data.transferPlan.freeTransfers} free transfer
+                    {recs.data.transferPlan.freeTransfers > 1 ? "s" : ""}
+                  </h3>
+                  <span className="text-xs text-muted-foreground">
+                    {recs.data.transferPlan.estimated ? "Estimated from your history" : "Season start"}
+                  </span>
+                </div>
+                <p className="text-sm">{recs.data.transferPlan.advice}</p>
+                {recs.data.transferPlan.transfers.length > 0 && (
+                  <>
+                    <ol className="mt-3 grid gap-2">
+                      {recs.data.transferPlan.transfers.map((s, i) => (
+                        <li key={s.id} className="squad-card">
+                          <span className="text-sm">
+                            <b>{i + 1}.</b> {s.out.name}{" "}
+                            <span className="text-muted-foreground">→</span> <b>{s.in.name}</b>{" "}
+                            <span className="pos-badge">{s.in.position}</span>{" "}
+                            <span className="text-xs text-muted-foreground">
+                              {formatMoney(s.out.price)} → {formatMoney(s.in.price)} ·{" "}
+                              {formatMoney(s.bankAfter)} left in the bank
+                            </span>
+                          </span>
+                          <span className="score">+{s.gain}</span>
+                        </li>
+                      ))}
+                    </ol>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Combined rating gain +{recs.data.transferPlan.totalGain} · no points hit
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+
             {recs.data &&
               (recs.data.suggestions.length === 0 ? (
                 <EmptyBlock>
