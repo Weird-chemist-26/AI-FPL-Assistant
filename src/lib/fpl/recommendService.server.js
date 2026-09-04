@@ -328,10 +328,100 @@ export async function getTransferRecommendations(teamId, gameweek) {
   suggestions.sort((a, b) => b.gain - a.gain);
   const top = suggestions.slice(0, 12);
 
+  /* ------------------------------------------------ free transfers + plan */
+  const { freeTransfers, estimated } = estimateFreeTransfers(history, gw);
+
+  // Build a plan that uses every free transfer, never re-using a player and
+  // always respecting the running bank balance and the 3-per-club rule.
+  const plan = [];
+  let runningBank = bank;
+  const usedOut = new Set();
+  const usedIn = new Set();
+  const planClubCounts = new Map(clubCounts);
+  for (const s of suggestions) {
+    if (plan.length >= freeTransfers) break;
+    if (usedOut.has(s.out.id) || usedIn.has(s.in.id)) continue;
+    const outPlayer = picks.squad.find((p) => p.id === s.out.id);
+    const inPlayer = allPlayers.find((p) => p.id === s.in.id);
+    if (!outPlayer || !inPlayer) continue;
+    const cost = inPlayer.price - outPlayer.price;
+    if (cost > runningBank + 0.001) continue;
+    const clubAfter =
+      (planClubCounts.get(inPlayer.teamId) || 0) -
+      (inPlayer.teamId === outPlayer.teamId ? 1 : 0);
+    if (clubAfter >= 3) continue;
+    runningBank = Math.round((runningBank - cost) * 10) / 10;
+    planClubCounts.set(outPlayer.teamId, (planClubCounts.get(outPlayer.teamId) || 1) - 1);
+    planClubCounts.set(inPlayer.teamId, (planClubCounts.get(inPlayer.teamId) || 0) + 1);
+    usedOut.add(s.out.id);
+    usedIn.add(s.in.id);
+    plan.push({ ...s, bankAfter: runningBank });
+  }
+
+  const planGain = Math.round(plan.reduce((sum, s) => sum + s.gain, 0) * 10) / 10;
+  const transferPlan = {
+    freeTransfers,
+    estimated,
+    transfers: plan,
+    totalGain: planGain,
+    bankAfter: runningBank,
+    advice: !plan.length
+      ? `No upgrade is worth making this week — roll your ${freeTransfers === 1 ? "transfer" : `${freeTransfers} transfers`} and keep the flexibility.`
+      : plan.length < freeTransfers
+        ? `Only ${plan.length} move${plan.length > 1 ? "s are" : " is"} genuinely worth it — roll the remaining ${freeTransfers - plan.length}.`
+        : `Use all ${freeTransfers} free transfer${freeTransfers > 1 ? "s" : ""} on the moves below — no points hit needed.`,
+  };
+
+  /* --------------------------------------------------------- captain pick */
+  const captainOptions = picks.starting
+    .map((p) => {
+      const fixtures = fixturesByTeam.get(p.teamId) || [];
+      const score = captainScore(p, fixtures);
+      if (score == null) return null;
+      return {
+        ...summarise(p),
+        captainScore: score,
+        gameweekFixtures: fixtures,
+        isCurrentCaptain: Boolean(p.isCaptain),
+        reasons: captainReasons(p, fixtures),
+        playerRaw: p,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.captainScore - a.captainScore)
+    .slice(0, 5);
+
+  const captainPick = captainOptions[0] || null;
+  const viceCaptain = captainOptions[1] || null;
+
+  const chips = buildChipAdvice({
+    history,
+    squad: picks.squad,
+    starting: picks.starting,
+    bench: picks.bench,
+    fixturesByTeam,
+    gw,
+    captainPick,
+  });
+
+  const strip = ({ playerRaw, ...rest }) => rest; // eslint-disable-line no-unused-vars
+
   return {
     gameweek: gw,
     bank: Math.round(bank * 10) / 10,
     best: top[0] || null,
     suggestions: top,
+    transferPlan,
+    captain: {
+      pick: captainPick ? strip(captainPick) : null,
+      vice: viceCaptain ? strip(viceCaptain) : null,
+      options: captainOptions.map(strip),
+      alreadyCaptain: Boolean(captainPick && captainPick.isCurrentCaptain),
+    },
+    chips: {
+      used: (history.chips || []).map((c) => ({ name: c.name, gameweek: c.gameweek })),
+      advice: chips,
+      recommended: chips.filter((c) => c.recommended),
+    },
   };
 }
