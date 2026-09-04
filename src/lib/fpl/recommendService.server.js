@@ -1,7 +1,15 @@
 // Transfer recommendation engine.
 // Kept as its own service so the scoring logic can be improved later
 // without the frontend needing any changes.
-import { getPlayers, getTeamPicks, getGameweekInfo, FplError } from "./fplService.server.js";
+import {
+  getPlayers,
+  getTeamPicks,
+  getGameweekInfo,
+  getTeamHistory,
+  getRawFixtures,
+  getTeams,
+  FplError,
+} from "./fplService.server.js";
 
 /** Turn fixture difficulty (1 easy - 5 hard) into a 0-10 score. */
 function fixtureScore(player) {
